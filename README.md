@@ -1,5 +1,7 @@
 # Viscoelastic Standard Linear Solid User Material with Thermal and Radiation Dose Effects
 
+For more details about data used in the development and calibration of the model see: https://doi.org/10.18434/mds2-2989
+
 ---
 
 ## README
