@@ -1,5 +1,9 @@
 # Viscoelastic Standard Linear Solid User Material with Thermal and Radiation Dose Effects
 
+This repository contains code and calibration data for a linear viscoelastic (Standard Linear Solid rheological model) finite element user material that incorporates the effects of temperature and radiation dosage via empirical fitting to measured data.
+
+The model is a research-grade code and while it should be relatively plug-and-play for those confortable with deploying finite element user materials in Claculix or Abaqus, is it not standalone software and requires operator skill to use successfully.
+
 For more details about data used in the development and calibration of the model see: https://doi.org/10.18434/mds2-2989
 
 ---
