@@ -1,0 +1,107 @@
+** Written by Newell Moser
+** National Institute of Standards and Technology
+** May 31, 2023
+**
+** Units: kg, m, s, N, Pa, J, K
+**
+**
+** ---------- NODE DEFINITIONS ----------
+*NODE
+1, 0.0, 0.0, 0.0
+2, 0.001, 0.0, 0.0
+3, 0.001, 0.001, 0.0
+4, 0.0, 0.001, 0.0
+5, 0.0, 0.0, 0.001
+6, 0.001, 0.0, 0.001
+7, 0.001, 0.001, 0.001
+8, 0.0, 0.001, 0.001
+**
+**
+** ---------- ELEMENT DEFINITIONS ----------
+*ELEMENT,TYPE=C3D8R
+1, 1, 2, 3, 4, 5, 6, 7, 8
+**
+**
+** ---------- SET DEFINITIONS ----------
+*NSET, NSET=all_nset
+1
+2
+3
+4
+5
+6
+7
+8
+*NSET, NSET=origin_nset
+1
+*NSET, NSET=negx_face_nset
+1
+4
+5
+8
+*NSET, NSET=negy_face_nset
+1
+2
+5
+6
+*NSET, NSET=negz_face_nset
+1
+2
+3
+4
+*NSET, NSET=posx_face_nset
+2
+3
+6
+7
+*ELSET, ELSET=all_elset
+1
+**
+**
+** ---------- MATERIAL DEFINITIONS ----------
+*MATERIAL, NAME=LIN_ISO_EL_umat
+*USER MATERIAL, CONSTANTS=2
+207000000000.0, 0.3, 293.0
+*DENSITY
+7830
+*MATERIAL,NAME=el_ref
+*ELASTIC,TYPE=ISOTROPIC
+207000000000.0, 0.3
+*DENSITY
+7830
+**
+**
+** ---------- SECTION DEFINITIONS ----------
+*SOLID SECTION, ELSET=all_elset, MATERIAL=LIN_ISO_EL_umat
+**
+**
+** ---------- HOMOGENOUS BOUNDARY CONDITIONS ----------
+*BOUNDARY
+negx_face_nset, 1
+negy_face_nset, 2
+negz_face_nset, 3
+**
+**
+** ---------- STATIC-NONLINEAR STEP DEFINITION ----------
+*STEP, NLGEOM=NO, INC=100
+*STATIC, SOLVER=SPOOLES
+1.0, 1.0, 0.01, 1.0
+**
+**
+** ---------- PRESCRIBED BOUNDARY CONDITIONS ----------
+*BOUNDARY
+posx_face_nset, 1, 1, 0.000002
+**
+**
+** ---------- OUTPUT DEFINITIONS ----------
+*NODE FILE, FREQUENCY=100000
+U, RF
+*EL FILE, FREQUENCY=100000
+S, E
+*NODE PRINT, NSET=all_nset, FREQUENCY=100000
+U, RF
+*EL PRINT, ELSET=all_elset, FREQUENCY=100000
+S, E
+**
+**
+*END STEP

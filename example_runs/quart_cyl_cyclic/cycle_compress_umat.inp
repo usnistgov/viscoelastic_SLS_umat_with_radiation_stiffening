@@ -1,0 +1,146 @@
+** Written by Newell Moser
+** National Institute of Standards and Technology
+** June 14, 2023
+**
+** Units: kg, m, s, N, Pa, J, K
+**
+**
+** ---------- NODE DEFINITIONS ----------
+*NODE
+1, 0.0, 0.0, 0.0
+2, 0.010, 0.0, 0.0
+3, 0.010, 0.010, 0.0
+4, 0.0, 0.010, 0.0
+5, 0.0, 0.0, 0.010
+6, 0.010, 0.0, 0.010
+7, 0.010, 0.010, 0.010
+8, 0.0, 0.010, 0.010
+**
+**
+** ---------- ELEMENT DEFINITIONS ----------
+*ELEMENT,TYPE=C3D8
+1, 1, 2, 3, 4, 5, 6, 7, 8
+**
+**
+** ---------- SET DEFINITIONS ----------
+*NSET, NSET=all_nset
+1
+2
+3
+4
+5
+6
+7
+8
+*NSET, NSET=origin_nset
+1
+*NSET, NSET=negx_face_nset
+1
+4
+5
+8
+*NSET, NSET=negy_face_nset
+1
+2
+5
+6
+*NSET, NSET=negz_face_nset
+1
+2
+3
+4
+*NSET, NSET=posx_face_nset
+2
+3
+6
+7
+*NSET, NSET=posy_face_nset
+3
+4
+7
+8
+*NSET, NSET=posz_face_nset
+5
+6
+7
+8
+*NSET, NSET=output_node
+7
+*ELSET, ELSET=all_elset
+1
+*ELSET, ELSET=output_element
+1
+**
+**
+** ---------- MATERIAL DEFINITIONS ----------
+*MATERIAL, NAME=ABAQUS_visc_umat
+**
+** Temperature should range between 253 K and 333 K.
+** Dosage should range between 0 Gy and 16200 Gy. Note, it's assumed
+** that 8100 Gy corresponds to 1 Day of X-ray exposure.
+*USER MATERIAL, CONSTANTS=4
+** Temperature (K), Dosage (Gy), UMAT logging flag (1 or -1), UMAT logging time, Dummy temperature (K)
+293.15, 8100.0, 1.0, 10.0, 293.0
+**
+*DEPVAR
+16
+*DENSITY
+190
+**
+*MATERIAL,NAME=el_ref
+*ELASTIC,TYPE=ISOTROPIC
+100000.0, 0.10
+*DENSITY
+120
+**
+**
+** ---------- SECTION DEFINITIONS ----------
+*SOLID SECTION, ELSET=all_elset, MATERIAL=ABAQUS_visc_umat
+**
+**
+** ---------- HOMOGENOUS BOUNDARY CONDITIONS ----------
+*BOUNDARY
+negx_face_nset, 1, 1
+negy_face_nset, 2, 2
+negz_face_nset, 3, 3
+**
+**
+** ---------- AMPLITUDE DEFINITIONS ----------
+*INCLUDE,INPUT="./sine_wave_amp.inp"
+**
+**
+** ---------- STATIC-NONLINEAR STEP DEFINITION ----------
+*STEP, NLGEOM=NO, INC=1000000, AMPLITUDE=RAMP
+**
+*STATIC, SOLVER=SPOOLES, DIRECT
+0.006283185, 10.05309649, 1.0E-6, 0.006283185
+**
+***DYNAMIC, SOLVER=SPOOLES
+**0.00006283185, 10.05309649, 1.0E-6, 0.006283185
+**
+**
+** ---------- PRESCRIBED BOUNDARY CONDITIONS ----------
+*BOUNDARY, AMPLITUDE=sine_10radpersec_amp
+posy_face_nset, 2, 2, 1.0
+**
+**
+** ---------- OUTPUT DEFINITIONS ----------
+** If NLGEOM=YES, output stresses appear to be Cauchy (Eulerian) stresses. 
+**
+** If NLGEOM=YES, output strains appear to be Green (Lagrangian) strains.
+**
+** WARNING! Mecway reports shear strains with a factor of 2, as if they
+** were an engineering strains, like Voigt notation. You must divide 
+** the shear strains by 2 in order to get the tensor components back.
+** 
+*NODE FILE, FREQUENCY=2
+U, RF
+*EL FILE, FREQUENCY=2
+S, E, PEEQ
+*NODE PRINT, NSET=output_node, FREQUENCY=2
+U, RF
+*EL PRINT, ELSET=output_element, FREQUENCY=2
+S, E
+**
+**
+*END STEP
