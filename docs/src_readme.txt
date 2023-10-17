@@ -6,10 +6,10 @@ sudo apt install build-essential
 sudo apt install gfortran
 sudo apt install libopenblas-dev
 
-Note, I am using gcc/gfortran version 9.4.0. If you also have Intel
-compilers installed, then it would be a good idea to NOT activate their
-environment variables. If you have some sort of command in your 
-.bashrc file like "source /opt/intel/oneapi/setvars.sh", then comment
+Note, I am using gcc/gfortran version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.2). 
+If you also have Intel compilers installed, then it would be a good idea to 
+NOT activate their environment variables. If you have some sort of command 
+in your .bashrc file like "source /opt/intel/oneapi/setvars.sh", then comment
 it out and restart your terminal session. This just adds an extra
 level of security to ensure that the correct compilers are chosen
 in the steps to come.
