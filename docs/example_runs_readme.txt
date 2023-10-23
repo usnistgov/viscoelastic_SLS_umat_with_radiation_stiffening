@@ -27,14 +27,15 @@ Folders include:
 	   and development.
 
 
-To run, first make sure CCX is compiles properly using the SLS+radiation
+To run, first make sure CCX compiles properly using the SLS+radiation
 UMAT provided in this package. Make sure the paths within the run scripts
 point to whereever the compiled executible resides. Next, make "run_ccx.sh"
 executable (e.g., with "chmod +x run_ccx.sh" in a bash terminal), and then
 simply execute "./run_ccx.sh". The results will be written to the containing
 folder, and progress can be monitored using the .sta file.
 
-Note that the codes have been tested on OpenMP parallization. 
+Note that the codes have been tested on OpenMP parallization in Ubuntu and
+may or may not be protable to other operating systems. 
 
 Analyzes of the result have been conducted using either the included python
 scripts in /src (for, e.g., stress traces) or by using the software package
